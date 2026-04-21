@@ -360,7 +360,7 @@
 }
 %end
 */
-
+/*
 %hook YTPivotBarView
 - (void)setRenderer:(YTIPivotBarRenderer *)renderer {
     NSMutableArray <YTIPivotBarSupportedRenderers *> *items = [renderer itemsArray];
@@ -379,8 +379,8 @@
         }
         if ([pID isEqualToString:@"FEuploads"]) {
             [indicesToRemove addIndex:i];
-            pID.hidden = YES;
-            [self removeFromSuperview];
+            // pID.hidden = YES;
+            // [self removeFromSuperview];
         }
         // if ([pID isEqualToString:@"FEsubscriptions"]) {
         //     [indicesToRemove addIndex:i];
@@ -396,7 +396,8 @@
     %orig(renderer);
 }
 %end
-/*
+*/
+
 // Remove Tabs
 %hook YTPivotBarView
 - (void)setRenderer:(YTIPivotBarRenderer *)renderer {
@@ -404,7 +405,7 @@
 
     NSDictionary *identifiersToRemove = @{
         // @"FEshorts",
-        @"FEsubscriptions",
+        // @"FEsubscriptions",
         @"FEuploads"
         // @"FElibrary"
     };
@@ -428,7 +429,6 @@
     %orig(renderer);
 }
 %end
-*/
 
 // Hide Tab Bar Indicators
 %hook YTPivotBarIndicatorView
