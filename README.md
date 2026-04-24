@@ -1,7 +1,7 @@
 # YouMod
 A tweak that's try to recreate features like in YTLite as much as possible. Contributors are welcome! ^^
 ## Why I created this project?
-The reason I created this repo is beacause of YTLite no longer free. So I'll try my best to recreate all the features as much as I can plus alternative tweaks conbine.
+The reason I created this project is beacause of YTLite no longer free. So I'll try my best to recreate all the features as much as I can plus alternative tweaks conbine.
 ## Features
 This tweak can hide, remove things or elements in YouTube. Such as:
 
