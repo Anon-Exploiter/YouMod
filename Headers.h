@@ -46,7 +46,7 @@
 // Feed
 #define RemoveVideoAds @"YouModRemoveVideoAds"
 #define HideYouTubePremium @"YouModHideYouTubePremiumPromotions"
-#define HideSubBar @"YouModHideSubBar"
+#define HideSubbar @"YouModHideSubbar"
 #define HideGenMusicShelf @"YouModHideGenMusicShelf"
 #define HideShortsShelf @"YouModHideShortsShelf"
 #define HideSearchHis @"YouModHideSearchHistoryAndSuggestions"
