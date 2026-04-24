@@ -5,7 +5,7 @@ The reason I created this repo is beacause of YTLite no longer free. So I'll try
 ## Features
 This tweak can hide, remove things or elements in YouTube. Such as:
 
-- Navaigation bar
+- Navigation bar
 - Player
 - Shorts
 - Tab bar
