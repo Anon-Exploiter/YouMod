@@ -165,23 +165,23 @@ static BOOL isDarkMode(UIView *view) {
 // OLED theme - implemented by @Tonwalter888
 %hook YTColor
 + (UIColor *)black0 {
-    return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig;
+    return IS_ENABLED(OLEDTheme) ? [self blackPure] : %orig;
 }
 
 + (UIColor *)black1 {
-    return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig;
+    return IS_ENABLED(OLEDTheme) ? [self blackPure] : %orig;
 }
 
 + (UIColor *)black2 {
-    return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig;
+    return IS_ENABLED(OLEDTheme) ? [self blackPure] : %orig;
 }
 
 + (UIColor *)black3 {
-    return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig;
+    return IS_ENABLED(OLEDTheme) ? [self blackPure] : %orig;
 }
 
 + (UIColor *)black4 {
-    return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig;
+    return IS_ENABLED(OLEDTheme) ? [self blackPure] : %orig;
 }
 %end
 
@@ -197,6 +197,11 @@ static BOOL isDarkMode(UIView *view) {
 %hook YTCommonColorPalette
 - (UIColor *)brandBackgroundSolid { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
 - (UIColor *)brandBackgroundPrimary { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
+- (UIColor *)brandBackgroundSecondary { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
+- (UIColor *)background1 { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
+- (UIColor *)background2 { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
+- (UIColor *)background3 { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
+- (UIColor *)baseBackground { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
 %end
 
 // _ASDisplayView filters
