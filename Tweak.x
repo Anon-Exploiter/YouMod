@@ -215,50 +215,6 @@ static BOOL isDarkMode(UIView *view) {
 
 %hook YTCommonColorPalette
 - (UIColor *)darkPalette { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
-/*
-- (UIColor *)brandBackgroundSolid {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
-        return [UIColor blackColor];
-    }
-    return %orig;
-}
-- (UIColor *)brandBackgroundPrimary {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
-        return [UIColor blackColor];
-    }
-    return %orig;
-}
-- (UIColor *)brandBackgroundSecondary {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
-        return [UIColor blackColor];
-    }
-    return %orig;
-}
-- (UIColor *)background1 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
-        return [UIColor blackColor];
-    }
-    return %orig;
-}
-- (UIColor *)background2 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
-        return [UIColor blackColor];
-    }
-    return %orig;
-}
-- (UIColor *)background3 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
-        return [UIColor blackColor];
-    }
-    return %orig;
-}
-- (UIColor *)baseBackground {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
-        return [UIColor blackColor];
-    }
-    return %orig;
-}
-*/
 %end
 
 %hook YTCinematicContainerView
