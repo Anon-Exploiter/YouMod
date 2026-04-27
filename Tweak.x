@@ -167,35 +167,35 @@ static BOOL isDarkMode(UIView *view) {
 // OLED theme - implemented by @Tonwalter888
 %hook YTColor
 + (UIColor *)black0 {
-    if (IS_ENABLED(OLEDTheme)) {
+    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black1 {
-    if (IS_ENABLED(OLEDTheme)) {
+    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black2 {
-    if (IS_ENABLED(OLEDTheme)) {
+    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black3 {
-    if (IS_ENABLED(OLEDTheme)) {
+    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black4 {
-    if (IS_ENABLED(OLEDTheme)) {
+    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
         return [self blackPure];
     }
     return %orig;
@@ -259,10 +259,15 @@ static BOOL isDarkMode(UIView *view) {
 %end
 
 %hook YTCinematicContainerView
-- (void)didMoveToWindow { if (!IS_ENABLED(OLEDTheme)) %orig; }
-- (void)layoutSubviews { if (!IS_ENABLED(OLEDTheme)) %orig; }
-- (void)loadWithModel:(id)arg { if (!IS_ENABLED(OLEDTheme)) %orig; }
-- (id)initWithFrame:(CGRect)arg { return IS_ENABLED(OLEDTheme) ? nil : %orig; }
+- (void)didMoveToWindow { if (!IS_ENABLED(OLEDTheme) || !isDarkMode2) %orig; }
+- (void)layoutSubviews { if (!IS_ENABLED(OLEDTheme) || !isDarkMode2) %orig; }
+- (void)loadWithModel:(id)arg { if (!IS_ENABLED(OLEDTheme) || !isDarkMode2) %orig; }
+- (id)initWithFrame:(CGRect)arg {
+    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
+        return nil;
+    }
+    return %orig;
+}
 %end
 
 // _ASDisplayView filters
