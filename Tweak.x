@@ -1,7 +1,7 @@
 // All Codes are adapt from YTLite and uYouEnhanced + Some of my research
 #import "Headers.h"
 
-#define isDarkMode2 (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
+// #define isDarkMode2 (UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
 
 Class YTILikeResponseClass, YTIDislikeResponseClass, YTIRemoveLikeResponseClass;
 
@@ -167,35 +167,35 @@ static BOOL isDarkMode(UIView *view) {
 // OLED theme - implemented by @Tonwalter888
 %hook YTColor
 + (UIColor *)black0 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
+    if (IS_ENABLED(OLEDTheme)) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black1 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
+    if (IS_ENABLED(OLEDTheme)) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black2 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
+    if (IS_ENABLED(OLEDTheme)) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black3 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
+    if (IS_ENABLED(OLEDTheme)) {
         return [self blackPure];
     }
     return %orig;
 }
 
 + (UIColor *)black4 {
-    if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
+    if (IS_ENABLED(OLEDTheme)) {
         return [self blackPure];
     }
     return %orig;
@@ -214,6 +214,8 @@ static BOOL isDarkMode(UIView *view) {
 */
 
 %hook YTCommonColorPalette
+- (UIColor *)darkPalette { return IS_ENABLED(OLEDTheme) ? [UIColor blackColor] : %orig; }
+/*
 - (UIColor *)brandBackgroundSolid {
     if (IS_ENABLED(OLEDTheme) && isDarkMode2) {
         return [UIColor blackColor];
@@ -256,6 +258,7 @@ static BOOL isDarkMode(UIView *view) {
     }
     return %orig;
 }
+*/
 %end
 
 %hook YTCinematicContainerView
