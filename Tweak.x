@@ -115,6 +115,11 @@ static BOOL isDarkMode(UIView *view) {
 - (void)showEndscreenControlsInPlayerBar:(BOOL)arg { %orig(NO); }
 %end
 
+%hook YTPaidContentOverlayView
+- (id)initWithParentResponder:(id)arg1 paidContentRenderer:(id)arg2 enableNewPaidProductDisclosure:(BOOL)arg3 { return nil; }
+- (void)layoutSubviews {}
+%end
+
 %group OLEDKeyboard
 %hook UIKeyboard
 - (void)displayLayer:(id)arg1 {
