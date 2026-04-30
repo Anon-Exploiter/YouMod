@@ -110,6 +110,11 @@ static BOOL isDarkMode(UIView *view) {
     return view._viewControllerForAncestor.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
 }
 
+%hook YTAutonavEndscreenController
+- (void)showEndscreen {}
+- (void)showEndscreenControlsInPlayerBar:(BOOL)arg { %orig(NO); }
+%end
+
 %group OLEDKeyboard
 %hook UIKeyboard
 - (void)displayLayer:(id)arg1 {
