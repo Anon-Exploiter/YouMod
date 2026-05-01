@@ -248,8 +248,12 @@ jobs:
             [ "$1" = "true" ]
           }
 
+          safe_git() {
+            env -u GIT_DIR -u GIT_WORK_TREE git "$@"
+          }
+
           remote_sha() {
-            git ls-remote "$1" "${2:-HEAD}" | awk '{print $1}' | head -n 1
+            safe_git ls-remote "$1" "${2:-HEAD}" | awk '{print $1}' | head -n 1
           }
 
           ensure_cache_release() {
@@ -285,15 +289,15 @@ jobs:
             rm -rf "$dir"
 
             if [ "$clone_mode" = "full" ]; then
-              git clone --quiet "$repo" "$dir"
+              safe_git clone --quiet "$repo" "$dir"
             else
-              git clone --quiet --depth=1 "$repo" "$dir"
+              safe_git clone --quiet --depth=1 "$repo" "$dir"
             fi
 
             (
               cd "$dir"
               if [ "$clone_mode" = "checkout" ]; then
-                git checkout --quiet "$source_sha"
+                safe_git checkout --quiet "$source_sha"
               fi
               eval "$build_command"
             )
@@ -410,7 +414,7 @@ jobs:
               "youtube-native-share" \
               "${ytnative_sha}-${protobuf_sha}" \
               "shallow" \
-              "git clone --quiet --depth=1 https://github.com/protocolbuffers/protobuf.git && make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64"
+              "safe_git clone --quiet --depth=1 https://github.com/protocolbuffers/protobuf.git && make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64"
           fi
 
           if is_true "${{ inputs.volboost }}"; then
