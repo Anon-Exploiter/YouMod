@@ -257,6 +257,30 @@ jobs:
             safe_git ls-remote "$1" "${2:-HEAD}" | awk '{print $1}' | head -n 1
           }
 
+          ensure_source_tweak() {
+            local repo="$1"
+            local dir="$2"
+            local clone_mode="${3:-shallow}"
+            local source_sha="${4:-}"
+
+            if [ -d "$dir/.git" ]; then
+              return
+            fi
+
+            if [ "$clone_mode" = "full" ] || [ "$clone_mode" = "checkout" ]; then
+              safe_git clone --quiet "$repo" "$dir"
+            else
+              safe_git clone --quiet --depth=1 "$repo" "$dir"
+            fi
+
+            if [ "$clone_mode" = "checkout" ]; then
+              (
+                cd "$dir"
+                safe_git checkout --quiet "$source_sha"
+              )
+            fi
+          }
+
           ensure_cache_release() {
             if gh release view "$CACHE_TAG" >/dev/null 2>&1; then
               return
@@ -287,13 +311,7 @@ jobs:
             fi
 
             echo "Cache miss for ${slug}; building ${source_sha}"
-            rm -rf "$dir"
-
-            if [ "$clone_mode" = "full" ] || [ "$clone_mode" = "checkout" ]; then
-              safe_git clone --quiet "$repo" "$dir"
-            else
-              safe_git clone --quiet --depth=1 "$repo" "$dir"
-            fi
+            ensure_source_tweak "$repo" "$dir" "$clone_mode" "$source_sha"
 
             (
               cd "$dir"
@@ -329,9 +347,11 @@ jobs:
             build_cached_tweak "$slug" "$repo" "$dir" "$source_sha" "shallow" "$build_command"
           }
 
+          ensure_source_tweak "https://github.com/PoomSmart/YouGroupSettings.git" "YouGroupSettings"
           build_head_tweak "ygs" "https://github.com/PoomSmart/YouGroupSettings.git" "YouGroupSettings"
 
           if is_true "${{ inputs.youpip }}" || is_true "${{ inputs.ytuhd }}" || is_true "${{ inputs.youquality }}" || is_true "${{ inputs.youspeed }}" || is_true "${{ inputs.youmute }}" || is_true "${{ inputs.youloop }}" || is_true "${{ inputs.youshare }}" || is_true "${{ inputs.getcap }}"; then
+            ensure_source_tweak "https://github.com/PoomSmart/YTVideoOverlay.git" "YTVideoOverlay"
             build_head_tweak "ytvo" "https://github.com/PoomSmart/YTVideoOverlay.git" "YTVideoOverlay"
           fi
 
@@ -372,6 +392,7 @@ jobs:
           fi
 
           if is_true "${{ inputs.youslider }}"; then
+            ensure_source_tweak "https://github.com/hbang/Alderis.git" "Alderis"
             build_head_tweak "youslider" "https://github.com/PoomSmart/YouSlider.git" "YouSlider"
             build_head_tweak "alderis" "https://github.com/hbang/Alderis.git" "Alderis" "make clean package DEBUG=0 FINALPACKAGE=1 ARCHS=arm64"
           fi
