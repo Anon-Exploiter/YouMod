@@ -19,8 +19,14 @@ jobs:
     runs-on: macos-latest
     permissions:
       contents: write
-    
+
     steps:
+      - name: Checkout YouMod
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch || github.ref }}
+          path: YouMod
+
       - name: Install dependencies
         run: brew install make ldid
 
@@ -29,25 +35,35 @@ jobs:
           echo "$(brew --prefix make)/libexec/gnubin" >> $GITHUB_PATH
           echo "THEOS=${{ github.workspace }}/theos" >> $GITHUB_ENV
 
-      - name: Clone Theos
-        run: git clone --quiet --depth=1 --recurse-submodules https://github.com/roothide/theos.git
-           
-      - name: Download iOS SDK
+      - name: Cache Theos setup
+        id: cache-theos
+        uses: actions/cache@v4
+        with:
+          path: theos
+          key: ${{ runner.os }}-roothide-theos-ios18.6-headers-v1
+
+      - name: Prepare Theos setup
         run: |
-          git clone --quiet --depth=1 -n --filter=tree:0 https://github.com/Tonwalter888/iOS-SDKs.git
-          cd iOS-SDKs
-          git sparse-checkout set --no-cone iPhoneOS18.6.sdk
-          git checkout
-          mv *.sdk $THEOS/sdks
+          if [ ! -d "$THEOS/.git" ]; then
+            git clone --quiet --depth=1 --recurse-submodules https://github.com/roothide/theos.git "$THEOS"
+          fi
 
-      - name: Clone your YouMod repo
-        run: git clone --quiet --depth=1 --branch ${{ inputs.branch || 'main' }} ${{ github.server_url }}/${{ github.repository }}.git YouMod
+          if [ ! -d "$THEOS/sdks/iPhoneOS18.6.sdk" ]; then
+            git clone --quiet --depth=1 -n --filter=tree:0 https://github.com/Tonwalter888/iOS-SDKs.git
+            cd iOS-SDKs
+            git sparse-checkout set --no-cone iPhoneOS18.6.sdk
+            git checkout --quiet
+            mv *.sdk "$THEOS/sdks"
+            cd ..
+          fi
 
-      - name: Clone YouTubeHeader
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouTubeHeader.git $THEOS/include/YouTubeHeader
+          if [ ! -d "$THEOS/include/YouTubeHeader" ]; then
+            git clone --quiet --depth=1 https://github.com/PoomSmart/YouTubeHeader.git "$THEOS/include/YouTubeHeader"
+          fi
 
-      - name: Clone PSHeader
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/PSheader.git $THEOS/include/PSHeader
+          if [ ! -d "$THEOS/include/PSHeader" ]; then
+            git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git "$THEOS/include/PSHeader"
+          fi
 
       - name: Build YouMod
         run: |
