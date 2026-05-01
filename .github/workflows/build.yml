@@ -1,7 +1,5 @@
 name: Build YouMod
 on:
-  push:
-    branches: [ "main" ]
   workflow_dispatch:
     inputs:
       branch:
