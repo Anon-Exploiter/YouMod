@@ -1,5 +1,7 @@
 name: Build YouMod
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
     inputs:
       branch:
@@ -20,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout YouMod
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: ${{ inputs.branch || github.ref }}
           path: YouMod
@@ -33,34 +35,48 @@ jobs:
           echo "$(brew --prefix make)/libexec/gnubin" >> $GITHUB_PATH
           echo "THEOS=${{ github.workspace }}/theos" >> $GITHUB_ENV
 
-      - name: Cache Theos setup
+      # Original from YTweaks
+      - name: Get Theos commit
+        run: |
+          get_commit_hash() {
+            local repo_url=$1
+            git ls-remote "$repo_url" HEAD | awk '{print substr($1,1,7)}'
+          }
+          echo "THEOS_COMMIT=$(get_commit_hash "https://github.com/theos/theos")" >> $GITHUB_ENV
+
+      - name: Cache Theos
         id: cache-theos
         uses: actions/cache@v5
         with:
           path: theos
-          key: ${{ runner.os }}-roothide-theos-ios18.6-headers-v1
+          key: YouMod-18.6-SDK-${{ env.THEOS_COMMIT }}
 
-      - name: Prepare Theos setup
+      - name: Setup Theos
+        if: ${{ steps.cache-theos.outputs.cache-hit != 'true' }}
         run: |
-          if [ ! -d "$THEOS/.git" ]; then
-            git clone --quiet --depth=1 --recurse-submodules https://github.com/roothide/theos.git "$THEOS"
-          fi
-
-          if [ ! -d "$THEOS/sdks/iPhoneOS18.6.sdk" ]; then
+            git clone --quiet --depth=1 --recurse-submodules https://github.com/theos/theos.git
             git clone --quiet --depth=1 -n --filter=tree:0 https://github.com/Tonwalter888/iOS-SDKs.git
             cd iOS-SDKs
             git sparse-checkout set --no-cone iPhoneOS18.6.sdk
             git checkout --quiet
             mv *.sdk "$THEOS/sdks"
-            cd ..
-          fi
-
+            
+      - name: Clone headers
+        run: |
           if [ ! -d "$THEOS/include/YouTubeHeader" ]; then
             git clone --quiet --depth=1 https://github.com/PoomSmart/YouTubeHeader.git "$THEOS/include/YouTubeHeader"
+          else
+            cd $THEOS/include/YouTubeHeader
+            git pull --quiet --force
+            cd ${{ github.workspace }}
           fi
-
+          
           if [ ! -d "$THEOS/include/PSHeader" ]; then
             git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git "$THEOS/include/PSHeader"
+          else
+            cd $THEOS/include/PSHeader
+            git pull --quiet --force
+            cd ${{ github.workspace }}
           fi
 
       - name: Build YouMod
