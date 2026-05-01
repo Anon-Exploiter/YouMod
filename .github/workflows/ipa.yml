@@ -178,6 +178,7 @@ jobs:
           }
           echo "THEOS_COMMIT=$(get_commit_hash "https://github.com/theos/theos")" >> $GITHUB_ENV
           echo "OPENYT_COMMIT=$(get_commit_hash "https://github.com/BillyCurtis/OpenYouTubeSafariExtension")" >> $GITHUB_ENV
+          echo "ALDERIS_COMMIT=$(get_commit_hash "https://github.com/hbang/Alderis")" >> $GITHUB_ENV
 
       - name: Cache Theos
         id: cache-theos
@@ -293,8 +294,16 @@ jobs:
         if: ${{ inputs.youslider }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouSlider.git
 
-      - name: Clone Alderis
+      - name: Cache Alderis
+        id: cache-alderis
         if: ${{ inputs.youslider }}
+        uses: actions/cache@v5
+        with:
+          path: Alderis
+          key: Alderis-${{ env.ALDERIS_COMMIT }}
+
+      - name: Clone Alderis
+        if: ${{ inputs.youslider && steps.cache-alderis.outputs.cache-hit != 'true' }}
         run: git clone --quiet --depth=1 https://github.com/hbang/Alderis.git
 
       - name: Clone YTHoldForSpeed
