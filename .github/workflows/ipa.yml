@@ -289,7 +289,7 @@ jobs:
             echo "Cache miss for ${slug}; building ${source_sha}"
             rm -rf "$dir"
 
-            if [ "$clone_mode" = "full" ]; then
+            if [ "$clone_mode" = "full" ] || [ "$clone_mode" = "checkout" ]; then
               safe_git clone --quiet "$repo" "$dir"
             else
               safe_git clone --quiet --depth=1 "$repo" "$dir"
