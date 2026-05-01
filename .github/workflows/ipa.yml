@@ -243,7 +243,7 @@ jobs:
           git clone --quiet -n --depth=1 --filter=tree:0 https://github.com/BillyCurtis/OpenYouTubeSafariExtension.git
           cd OpenYouTubeSafariExtension
           git sparse-checkout set --no-cone OpenYouTubeSafariExtension.appex
-          git checkout
+          git checkout --quiet
           mv *.appex ${{ github.workspace }}
 
       - name: Clone YouPiP
